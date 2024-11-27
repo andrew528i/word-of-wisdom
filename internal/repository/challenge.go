@@ -41,7 +41,7 @@ func (r *challengeMemoryRepository) CreateChallenge(ctx context.Context, challen
 	// Check if challenge with this ID already exists
 	if _, exists := r.challenges[id]; exists {
 		kit.Logger.Errorw("failed to create challenge: already exists",
-			"id", id)
+			"id", challenge.ID())
 		return errors.ErrChallengeExists
 	}
 
@@ -60,7 +60,7 @@ func (r *challengeMemoryRepository) CreateChallenge(ctx context.Context, challen
 
 	r.challenges[id] = challengeCopy
 	kit.Logger.Infow("created new challenge",
-		"id", id,
+		"id", challenge.ID(),
 		"expires_at", challenge.ExpiresAt)
 	return nil
 }

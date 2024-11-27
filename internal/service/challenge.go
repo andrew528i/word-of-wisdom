@@ -129,6 +129,10 @@ func (s *challengeService) Solve(ctx context.Context, challenge *domain.Challeng
 				kit.Logger.Infow("found valid solution",
 					"id", challenge.ID(),
 					"solution", solution.String())
+
+				// Store the solution
+				challenge.Solution = new(big.Int).Set(solution)
+
 				return solution, nil
 			}
 			solution.Add(solution, big.NewInt(1))
