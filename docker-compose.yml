@@ -1,0 +1,17 @@
+services:
+  server:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_ADDRESS=:8080
+      - POW_COMPLEXITY=100000
+      - CHALLENGE_EXPIRATION_SECONDS=300
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-zv", "localhost", "8080"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
