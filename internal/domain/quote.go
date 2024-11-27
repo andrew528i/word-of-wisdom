@@ -6,9 +6,6 @@ import (
 
 // Quote represents a single quote entity with its attributes
 type Quote struct {
-	// ID uniquely identifies the quote
-	ID string
-
 	// Text contains the actual quote content
 	Text string
 
@@ -26,6 +23,6 @@ type QuoteRepository interface {
 	GetRandom(ctx context.Context) (*Quote, error)
 
 	// Add stores a new quote in the repository
-	// Returns errors.ErrQuoteExists if a quote with the same ID already exists
+	// Returns errors.ErrQuoteExists if the same quote already exists
 	Add(ctx context.Context, quote *Quote) error
 }
