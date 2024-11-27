@@ -12,20 +12,20 @@ type quoteService struct {
 }
 
 // NewQuoteService creates a new instance of quote service
-func NewQuoteService(quoteRepository domain.QuoteRepository) domain.QuoteRepository {
+func NewQuoteService(quoteRepository domain.QuoteRepository) domain.QuoteService {
 	return &quoteService{
 		quoteRepository: quoteRepository,
 	}
 }
 
-// GetRandom returns a random quote from the storage
-func (s *quoteService) GetRandom(ctx context.Context) (*domain.Quote, error) {
+// GetRandomQuote returns a random quote from the storage
+func (s *quoteService) GetRandomQuote(ctx context.Context) (*domain.Quote, error) {
 	kit.Logger.Info("quote service: get random quote")
-	return s.quoteRepository.GetRandom(ctx)
+	return s.quoteRepository.GetRandomQuote(ctx)
 }
 
-// Add stores a new quote in the repository
-func (s *quoteService) Add(ctx context.Context, quote *domain.Quote) error {
-	kit.Logger.Info("quote service: add quote")
-	return s.quoteRepository.Add(ctx, quote)
+// CreateQuote stores a new quote in the repository
+func (s *quoteService) CreateQuote(ctx context.Context, quote *domain.Quote) error {
+	kit.Logger.Info("quote service: create quote")
+	return s.quoteRepository.CreateQuote(ctx, quote)
 }

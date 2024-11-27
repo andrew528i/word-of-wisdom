@@ -16,13 +16,24 @@ type Quote struct {
 	Source string
 }
 
+// QuoteService defines operations for managing quotes
+type QuoteService interface {
+	// GetRandomQuote returns a random quote from the storage
+	// If no quotes are available, returns errors.ErrNoQuotes
+	GetRandomQuote(ctx context.Context) (*Quote, error)
+
+	// CreateQuote stores a new quote in the repository
+	// Returns errors.ErrQuoteExists if the same quote already exists
+	CreateQuote(ctx context.Context, quote *Quote) error
+}
+
 // QuoteRepository defines the interface for quote storage operations
 type QuoteRepository interface {
-	// GetRandom returns a random quote from the storage
+	// GetRandomQuote returns a random quote from the storage
 	// If no quotes are available, returns errors.ErrNoQuotes
-	GetRandom(ctx context.Context) (*Quote, error)
+	GetRandomQuote(ctx context.Context) (*Quote, error)
 
-	// Add stores a new quote in the repository
+	// CreateQuote stores a new quote in the repository
 	// Returns errors.ErrQuoteExists if the same quote already exists
-	Add(ctx context.Context, quote *Quote) error
+	CreateQuote(ctx context.Context, quote *Quote) error
 }

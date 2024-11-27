@@ -28,12 +28,12 @@ func TestQuoteRepository(t *testing.T) {
 
 func (s *QuoteRepositoryTestSuite) TestGetRandomEmpty() {
 	// When repository is empty, should return ErrNoQuotes
-	quote, err := s.repo.GetRandom(s.ctx)
+	quote, err := s.repo.GetRandomQuote(s.ctx)
 	assert.ErrorIs(s.T(), err, errors.ErrNoQuotes)
 	assert.Nil(s.T(), quote)
 }
 
-func (s *QuoteRepositoryTestSuite) TestAddAndGetRandom() {
+func (s *QuoteRepositoryTestSuite) TestCreateAndGetRandom() {
 	testCases := []struct {
 		name    string
 		quotes  []*domain.Quote
@@ -69,14 +69,14 @@ func (s *QuoteRepositoryTestSuite) TestAddAndGetRandom() {
 		s.Run(tc.name, func() {
 			// Add quotes
 			for _, q := range tc.quotes {
-				err := s.repo.Add(s.ctx, q)
+				err := s.repo.CreateQuote(s.ctx, q)
 				assert.NoError(s.T(), err)
 			}
 
 			// Get random quote multiple times to ensure randomness
 			quotesMap := make(map[string]bool)
 			for i := 0; i < 10; i++ {
-				quote, err := s.repo.GetRandom(s.ctx)
+				quote, err := s.repo.GetRandomQuote(s.ctx)
 				assert.NoError(s.T(), err)
 				assert.NotNil(s.T(), quote)
 				quotesMap[quote.Text] = true
@@ -88,18 +88,18 @@ func (s *QuoteRepositoryTestSuite) TestAddAndGetRandom() {
 	}
 }
 
-func (s *QuoteRepositoryTestSuite) TestAddDuplicate() {
+func (s *QuoteRepositoryTestSuite) TestCreateDuplicate() {
 	testQuote := &domain.Quote{
 		Text:   "Test quote",
 		Author: "Author",
 	}
 
 	// First add should succeed
-	err := s.repo.Add(s.ctx, testQuote)
+	err := s.repo.CreateQuote(s.ctx, testQuote)
 	assert.NoError(s.T(), err)
 
 	// Second add with same content should fail
-	err = s.repo.Add(s.ctx, testQuote)
+	err = s.repo.CreateQuote(s.ctx, testQuote)
 	assert.ErrorIs(s.T(), err, errors.ErrQuoteExists)
 
 	// Add with different content should succeed
@@ -107,7 +107,7 @@ func (s *QuoteRepositoryTestSuite) TestAddDuplicate() {
 		Text:   "Different quote",
 		Author: "Author",
 	}
-	err = s.repo.Add(s.ctx, newQuote)
+	err = s.repo.CreateQuote(s.ctx, newQuote)
 	assert.NoError(s.T(), err)
 }
 
@@ -118,7 +118,7 @@ func (s *QuoteRepositoryTestSuite) TestQuoteImmutability() {
 	}
 
 	// Add the quote
-	err := s.repo.Add(s.ctx, originalQuote)
+	err := s.repo.CreateQuote(s.ctx, originalQuote)
 	assert.NoError(s.T(), err)
 
 	// Modify the original quote
@@ -126,7 +126,7 @@ func (s *QuoteRepositoryTestSuite) TestQuoteImmutability() {
 	originalQuote.Author = "Modified author"
 
 	// Get the quote from repository
-	storedQuote, err := s.repo.GetRandom(s.ctx)
+	storedQuote, err := s.repo.GetRandomQuote(s.ctx)
 	assert.NoError(s.T(), err)
 
 	// Verify the stored quote wasn't modified

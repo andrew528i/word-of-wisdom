@@ -24,8 +24,8 @@ func NewQuoteMemoryRepository() domain.QuoteRepository {
 	}
 }
 
-// GetRandom returns a random quote from the storage
-func (r *quoteMemoryRepository) GetRandom(ctx context.Context) (*domain.Quote, error) {
+// GetRandomQuote returns a random quote from the storage
+func (r *quoteMemoryRepository) GetRandomQuote(ctx context.Context) (*domain.Quote, error) {
 	r.RLock()
 	defer r.RUnlock()
 
@@ -41,8 +41,8 @@ func (r *quoteMemoryRepository) GetRandom(ctx context.Context) (*domain.Quote, e
 	return quote, nil
 }
 
-// Add stores a new quote in the repository
-func (r *quoteMemoryRepository) Add(ctx context.Context, quote *domain.Quote) error {
+// CreateQuote stores a new quote in the repository
+func (r *quoteMemoryRepository) CreateQuote(ctx context.Context, quote *domain.Quote) error {
 	r.Lock()
 	defer r.Unlock()
 
